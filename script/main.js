@@ -40,4 +40,6 @@ alert("No ingresó un número válido");
 
 console.log("Historial de préstamos:");
 
-console.log(historialPrestamos);
+console.log(historialPrestamos); 
+
+Hola 
