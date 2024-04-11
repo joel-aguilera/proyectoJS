@@ -42,4 +42,4 @@ console.log("Historial de préstamos:");
 
 console.log(historialPrestamos); 
 
-Hola 
+alert ("probando git")
