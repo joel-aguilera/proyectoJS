@@ -1,50 +1,43 @@
 const tasaNominalAnual = 150;
 
-let tasaNominalMensual = tasaNominalAnual / 12;
+const tasaNominalMensual = tasaNominalAnual / 12;
+
+const historialPrestamos = [];
 
 function calcularCuota(monto, tiempo) {
 
-  let cuota = monto / tiempo + (monto * tasaNominalMensual) / 100;
+const cuota = (monto / tiempo) + (monto * tasaNominalMensual) / 100;
 
-  return cuota.toFixed(1);
+return Number(cuota.toFixed(1));
 
 }
 
 while (true) {
 
-  let monto = parseInt(
+const monto = parseInt(prompt("Ingrese cantidad a pedir: \n1.000 \n5.000 \n10.000 \n20.000 \n50.000 \n100.000"));
 
-    prompt("Ingrese cantidad a pedir: \n1.000 \n5.000 \n10.000 \n20.000 \n50.000 \n100.000")
+const tiempo = parseInt(prompt("Ingrese cantidad de meses en los que desea devolver: \n6 \n9 \n12 \n18"));
 
-  );
+if ((monto==1000||monto==5000||monto==10000||monto==20000||monto==50000||monto==100000)&&(tiempo==6||tiempo==9||tiempo==12||tiempo==18)){
 
+const cuota = calcularCuota(monto, tiempo);
 
+alert("Tu cuota mensual es " + cuota);
 
-  let tiempo = parseInt(
+const prestamo = { monto, tiempo, cuota };
 
-    prompt("Ingrese cantidad de meses en los que desea devolver: \n6 \n9 \n12 \n18" )
+historialPrestamos.push(prestamo);
 
-  );
+break;
 
-  if (
+} else {
 
-    (monto == 1000 || monto == 5000 || monto == 10000 || monto == 20000 || monto == 50000 || monto == 100000) &&
-
-    (tiempo == 6 || tiempo == 9 || tiempo == 12 || tiempo == 18)
-
-  ) {
-
-    let cuota = calcularCuota(monto, tiempo);
-
-
-    alert("Tu cuota mensual es " + cuota);
-
-    break;
-
-  } else {
-
-    alert("No ingresó un número válido");
-
-  }
+alert("No ingresó un número válido");
 
 }
+
+}
+
+console.log("Historial de préstamos:");
+
+console.log(historialPrestamos);
