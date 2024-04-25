@@ -1,16 +1,55 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prestamo</title>
+    <title>Registro de Usuarios y Préstamos</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>
-        Prestamo
-    </h1>
+    <section id="principal" class="container-fluid">
+        <article id="articulo">
+            <h1 id="titulo">Registro de Usuarios y Préstamos</h1>
+        </article>
+        <article id="formulario">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" placeholder="Ingrese su nombre">
+            <label for="email">Email:</label>
+            <input type="email" id="email" placeholder="Ingrese su email">
+            <label for="edad">Edad:</label>
+            <input type="number" id="edad" placeholder="Ingrese su edad">
+            <button id="registrarUsuario" type="button">Registrar Usuario</button>
+        </article>
+        <article id="prestamo">
+            <label for="monto">Monto del préstamo:</label>
+            <select id="monto">
+                <option value="1000">1.000</option>
+                <option value="5000">5.000</option>
+                <option value="10000">10.000</option>
+                <option value="20000">20.000</option>
+                <option value="50000">50.000</option>
+                <option value="100000">100.000</option>
+            </select>
+            <label for="tiempo">Tiempo de devolución (meses):</label>
+            <select id="tiempo">
+                <option value="6">6</option>
+                <option value="9">9</option>
+                <option value="12">12</option>
+                <option value="18">18</option>
+            </select>
+            <button id="calcularCuota" type="button">Calcular Cuota</button>
+
+        </article>
+        <article id="registroUsuarios">
+
+        </article>
+        <article id="historialPrestamos">
+
+        </article>
+    </section>
     <script src="./script/main.js"></script>
 </body>
 
