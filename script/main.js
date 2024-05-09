@@ -1,7 +1,8 @@
 const tasaNominalAnual = 150;
 const tasaNominalMensual = tasaNominalAnual / 12;
-let historialPrestamos = [];
-let registros = [];
+const historialPrestamos = [];
+const registros = [];
+
 
 class Usuario {
     constructor(nombre, email, edad) {
@@ -11,6 +12,9 @@ class Usuario {
     }
 }
 
+function verificarExistenciaUsuario(email) {
+    return registros.some(usuario => usuario.email === email);
+}
 
 function guardarRegistros() {
     localStorage.setItem('registros', JSON.stringify(registros));
@@ -38,13 +42,16 @@ function agregarUsuario() {
     const email = document.getElementById('email').value;
     const edad = document.getElementById('edad').value;
 
-    if (!nombre || !email || !edad) {
-        alert("Por favor complete todos los campos.");
+    if (!(nombre && email && edad)) {
+        mostrarMensajeSweetAlert("error", "Campos vacíos", "Por favor complete todos los datos.");
         return;
     }
 
-    if (isNaN(edad) || edad <= 0) {
-        alert("Por favor ingrese una edad válida.");
+    if (edad <= 18) {
+        mostrarMensajeSweetAlert("error", "Edad no válida", "Debe tener 18 años o más para acceder a un prestamo")
+    }
+    if (verificarExistenciaUsuario(email)) {
+        mostrarMensajeSweetAlert("error", "Correo electrónico duplicado", "El correo electrónico ingresado ya está registrado.");
         return;
     }
 
@@ -52,7 +59,7 @@ function agregarUsuario() {
     registros.push(usuario);
     guardarRegistros();
     mostrarRegistrosUsuarios();
-    alert("Registro exitoso");
+    mostrarMensajeSweetAlert("success", "Registro exitoso", "Su registro fue guardado con éxito");
 }
 
 function mostrarRegistrosUsuarios() {
@@ -74,16 +81,15 @@ function mostrarRegistrosUsuarios() {
 function calcularCuota() {
     const monto = parseInt(document.getElementById('monto').value);
     const tiempo = parseInt(document.getElementById('tiempo').value);
-    if ((monto === 1000 || monto === 5000 || monto === 10000 || monto === 20000 || monto === 50000 || monto === 100000) && (tiempo === 6 || tiempo === 9 || tiempo === 12 || tiempo === 18)) {
+    if ([1000, 5000, 10000, 20000, 50000, 100000].includes(monto) && [6, 9, 12, 18].includes(tiempo)) {
         const cuota = (monto / tiempo) + (monto * tasaNominalMensual) / 100;
-        alert("Tu cuota mensual es " + cuota.toFixed(1));
+        alert("Tu cuota mensual es " + cuota.toFixed(2));
         const prestamo = { monto, tiempo, cuota };
         historialPrestamos.push(prestamo);
         guardarHistorial();
         mostrarHistorialPrestamos();
-        alert("Préstamo registrado con éxito");
-    } else {
-        alert("No ingresó un número válido");
+        mostrarMensajeSweetAlert("success", "Préstamo realizado", "Su prestamo fue gestionado correctamente");
+        return;
     }
 }
 
@@ -102,14 +108,50 @@ function mostrarHistorialPrestamos() {
         historial.appendChild(prestamoHTML);
     });
 }
+function mostrarMensajeSweetAlert(icono, titulo, texto) {
+    Swal.fire({
+        icon: icono,
+        title: titulo,
+        text: texto,
+        showConfirmButton: false,
+        timer: 1500
+    });
+}
+const contenedor = document.getElementById('principal');
+const boton = document.getElementById('mode');
 
 
-document.addEventListener('DOMContentLoaded', () => {
-    cargarRegistros();
-    cargarHistorial();
-    mostrarRegistrosUsuarios();
-    mostrarHistorialPrestamos();
-});
+boton.onclick = () => {
+    if (localStorage.getItem('mode') == 'dark') {
+        pasarALight();
+    } else {
+        pasarADark();
+    }
+}
+
+function pasarADark() {
+    localStorage.setItem('mode', 'dark');
+    boton.innerText = 'Light Mode';
+    contenedor.classList.replace('light', 'dark');
+    document.body.className = 'dark';
+}
+
+function pasarALight() {
+    localStorage.setItem('mode', 'light');
+    boton.innerText = 'Dark Mode';
+    contenedor.classList.replace('dark', 'light');
+    document.body.className = 'light';
+}
+if (localStorage.getItem('mode') == 'dark') {
+
+    pasarADark();
+
+} else {
+
+    pasarALight();
+
+}
 
 document.getElementById('registrarUsuario').addEventListener('click', agregarUsuario);
 document.getElementById('calcularCuota').addEventListener('click', calcularCuota);
+
