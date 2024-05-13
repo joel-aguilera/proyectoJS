@@ -2,14 +2,14 @@
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-} 
+}
 
-.dark{
+.dark {
     background-color: black;
     color: white;
 }
 
-.light{
+.light {
     background-color: white;
     color: black;
 }

@@ -3,7 +3,6 @@ const tasaNominalMensual = tasaNominalAnual / 12;
 const historialPrestamos = [];
 const registros = [];
 
-
 class Usuario {
     constructor(nombre, email, edad) {
         this.nombre = nombre;
@@ -43,15 +42,15 @@ function agregarUsuario() {
     const edad = document.getElementById('edad').value;
 
     if (!(nombre && email && edad)) {
-        mostrarMensajeSweetAlert("error", "Campos vacíos", "Por favor complete todos los datos.");
+        mostrarMensajeSweetAlert('error', 'Campos vacíos', 'Por favor complete todos los datos.');
         return;
     }
 
     if (edad <= 18) {
-        mostrarMensajeSweetAlert("error", "Edad no válida", "Debe tener 18 años o más para acceder a un prestamo")
+        mostrarMensajeSweetAlert('error', 'Edad no válida', 'Debe tener 18 años o más para acceder a un prestamo')
     }
     if (verificarExistenciaUsuario(email)) {
-        mostrarMensajeSweetAlert("error", "Correo electrónico duplicado", "El correo electrónico ingresado ya está registrado.");
+        mostrarMensajeSweetAlert('error', 'Correo electrónico duplicado', 'El correo electrónico ingresado ya está registrado.');
         return;
     }
 
@@ -59,12 +58,12 @@ function agregarUsuario() {
     registros.push(usuario);
     guardarRegistros();
     mostrarRegistrosUsuarios();
-    mostrarMensajeSweetAlert("success", "Registro exitoso", "Su registro fue guardado con éxito");
+    mostrarMensajeSweetAlert('success', 'Registro exitoso', 'Su registro fue guardado con éxito');
 }
 
 function mostrarRegistrosUsuarios() {
     const registroUsuarios = document.getElementById('registroUsuarios');
-    registroUsuarios.innerHTML = "";
+    registroUsuarios.innerHTML = '';
     registros.forEach((usuario, index) => {
         const usuarioHTML = document.createElement('div');
         usuarioHTML.innerHTML = `
@@ -83,19 +82,19 @@ function calcularCuota() {
     const tiempo = parseInt(document.getElementById('tiempo').value);
     if ([1000, 5000, 10000, 20000, 50000, 100000].includes(monto) && [6, 9, 12, 18].includes(tiempo)) {
         const cuota = (monto / tiempo) + (monto * tasaNominalMensual) / 100;
-        alert("Tu cuota mensual es " + cuota.toFixed(2));
+        alert('Tu cuota mensual es ' + cuota.toFixed(2));
         const prestamo = { monto, tiempo, cuota };
         historialPrestamos.push(prestamo);
         guardarHistorial();
         mostrarHistorialPrestamos();
-        mostrarMensajeSweetAlert("success", "Préstamo realizado", "Su prestamo fue gestionado correctamente");
+        mostrarMensajeSweetAlert('success', 'Préstamo realizado', 'Su prestamo fue gestionado correctamente');
         return;
     }
 }
 
 function mostrarHistorialPrestamos() {
     const historial = document.getElementById('historialPrestamos');
-    historial.innerHTML = "";
+    historial.innerHTML = '';
     historialPrestamos.forEach((prestamo, index) => {
         const prestamoHTML = document.createElement('div');
         prestamoHTML.innerHTML = `
@@ -155,3 +154,28 @@ if (localStorage.getItem('mode') == 'dark') {
 document.getElementById('registrarUsuario').addEventListener('click', agregarUsuario);
 document.getElementById('calcularCuota').addEventListener('click', calcularCuota);
 
+
+
+function obtenerCotizacionUsd() {
+    const URLDOLAR = 'https://api.bluelytics.com.ar/v2/latest';
+    fetch(URLDOLAR)
+        .then(respuesta => respuesta.json())
+        .then(datos => {
+            const cotizacionUsd = `
+                <p>Valor de venta USD oficial: ${datos.oficial.value_sell}</p>
+                <p>Valor de compra USD oficial: ${datos.oficial.value_buy}</p>
+                <p>Valor de venta USD Blue: ${datos.blue.value_sell}</p>
+                <p>Valor de compra USD Blue: ${datos.blue.value_buy}</p>
+
+            `;
+
+            const cotizacionDolarDiv = document.getElementById('cotizacionDolar');
+            cotizacionDolarDiv.innerHTML = cotizacionUsd;
+        })
+        .catch(error => {
+            mostrarMensajeSweetAlert('error', 'Error', 'Hubo un problema al cargar la cotización del dólar. Por favor, inténtelo de nuevo más tarde.');
+            console.error('Hubo un problema con la solicitud:', error);
+        });
+}
+
+obtenerCotizacionUsd();
